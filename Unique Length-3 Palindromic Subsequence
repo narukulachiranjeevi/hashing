@@ -1,0 +1,28 @@
+O(26*N) Time Complexity
+for each letter its going to check the palindrome or not ..
+we need 3 length palindrome so it must have two same character 
+Eg: ABA,BCB,CAC
+
+
+class Solution {
+    public int countPalindromicSubsequence(String s) {
+        int n = s.length();
+        Map<Character,Integer> prefix = new HashMap<>();
+        Map<Character,Integer> suffix = new HashMap<>();
+        prefix.put(s.charAt(0),1);
+        Set<String> set = new HashSet<>();
+        for(int i=1;i<n;i++){
+            suffix.put(s.charAt(i),suffix.getOrDefault(s.charAt(i),0)+1);
+        }
+        for(int i=1;i<n;i++){
+            for(char key:prefix.keySet()){
+                if(suffix.containsKey(key) && key!=s.charAt(i)) set.add(key+" "+s.charAt(i)+" "+key);
+                else if(key==s.charAt(i) && suffix.containsKey(s.charAt(i)) && suffix.get(s.charAt(i))>=2) set.add(s.charAt(i)+" "+s.charAt(i)+" "+s.charAt(i)); 
+            }
+            if(suffix.get(s.charAt(i))==1) suffix.remove(s.charAt(i));
+            else suffix.put(s.charAt(i),suffix.get(s.charAt(i))-1);
+            prefix.put(s.charAt(i),prefix.getOrDefault(s.charAt(i),0)+1);
+        }
+        return set.size();
+    }
+}
